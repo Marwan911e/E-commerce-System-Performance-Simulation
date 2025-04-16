@@ -10,6 +10,9 @@ class EcommerceSystem:
         self.response_times = []
         self.queue_lengths = []
         self.dropped_requests = 0
+        self.server_busy_time = 0
+        self.last_busy_check = 0
+        self.utilization_samples = []
     
     def handle_request(self, user_id):
         arrival_time = self.env.now
@@ -19,6 +22,9 @@ class EcommerceSystem:
         
         # Request a server
         with self.server.request() as request:
+            # Track server busy time for utilization calculation
+            request_start = self.env.now
+            
             yield request
             
             # Process the request
@@ -27,7 +33,16 @@ class EcommerceSystem:
             # Record response time
             response_time = self.env.now - arrival_time
             self.response_times.append(response_time)
+            
+            # Update server busy time
+            self.server_busy_time += self.env.now - request_start
 
+    def sample_utilization(self):
+        """Take a sample of current server utilization"""
+        if self.server.capacity > 0:
+            current_utilization = len(self.server.users) / self.server.capacity
+            self.utilization_samples.append(current_utilization)
+            self.last_busy_check = self.env.now
 
 def run_simulation(env, system, num_users, arrival_rate):
     """Run the e-commerce simulation for a specific user count"""
@@ -36,11 +51,19 @@ def run_simulation(env, system, num_users, arrival_rate):
         env.process(system.handle_request(i))
         yield env.timeout(random.expovariate(arrival_rate))
 
+def utilization_monitor(env, system):
+    """Process to sample utilization at regular intervals"""
+    while True:
+        system.sample_utilization()
+        yield env.timeout(0.1)  # Sample every 0.1 time units
 
 def static_simulation(num_servers, num_users, duration=60):
     """Run simulation with static number of servers"""
     env = simpy.Environment()
     system = EcommerceSystem(env, num_servers=num_servers)
+    
+    # Start utilization monitoring process
+    env.process(utilization_monitor(env, system))
     
     # Start user arrivals process
     env.process(run_simulation(env, system, num_users, arrival_rate=num_users/duration))
@@ -51,14 +74,15 @@ def static_simulation(num_servers, num_users, duration=60):
     # Calculate statistics
     avg_response_time = statistics.mean(system.response_times) if system.response_times else 0
     avg_queue_length = statistics.mean(system.queue_lengths) if system.queue_lengths else 0
+    avg_utilization = statistics.mean(system.utilization_samples) if system.utilization_samples else 0
     
     return {
         'avg_response_time': avg_response_time * 1000,  # Convert to ms
         'avg_queue_length': avg_queue_length,
         'num_requests': len(system.response_times),
-        'dropped_requests': system.dropped_requests
+        'dropped_requests': system.dropped_requests,
+        'avg_utilization': avg_utilization * 100  # Convert to percentage
     }
-
 
 def dynamic_simulation(min_servers, max_servers, num_users, duration=60):
     """Run simulation with dynamic scaling of servers"""
@@ -74,18 +98,29 @@ def dynamic_simulation(min_servers, max_servers, num_users, duration=60):
             # Check if we need to scale up (if queue is getting long)
             if len(system.server.queue) > 5 and current_servers < max_servers:
                 current_servers += 1
+                old_server = system.server
                 system.server = simpy.Resource(env, current_servers)
+                # Transfer any users from old server to new one
+                system.server.users = old_server.users
+                system.server.queue = old_server.queue
                 servers_added.append((env.now, current_servers))
                 print(f"Time {env.now}: Scaled up to {current_servers} servers")
             
             # Check if we need to scale down
-            elif len(system.server.queue) == 0 and current_servers > min_servers:
+            elif len(system.server.queue) == 0 and len(system.server.users) / current_servers < 0.5 and current_servers > min_servers:
                 current_servers -= 1
+                old_server = system.server
                 system.server = simpy.Resource(env, current_servers)
+                # Transfer any users from old server to new one
+                system.server.users = old_server.users
+                system.server.queue = old_server.queue
                 servers_added.append((env.now, current_servers))
                 print(f"Time {env.now}: Scaled down to {current_servers} servers")
             
             yield env.timeout(5)  # Check every 5 time units
+    
+    # Start utilization monitoring process
+    env.process(utilization_monitor(env, system))
     
     # Start autoscaling and user arrivals
     env.process(auto_scale())
@@ -97,6 +132,7 @@ def dynamic_simulation(min_servers, max_servers, num_users, duration=60):
     # Calculate statistics
     avg_response_time = statistics.mean(system.response_times) if system.response_times else 0
     avg_queue_length = statistics.mean(system.queue_lengths) if system.queue_lengths else 0
+    avg_utilization = statistics.mean(system.utilization_samples) if system.utilization_samples else 0
     
     return {
         'avg_response_time': avg_response_time * 1000,  # Convert to ms
@@ -104,20 +140,20 @@ def dynamic_simulation(min_servers, max_servers, num_users, duration=60):
         'num_requests': len(system.response_times),
         'dropped_requests': system.dropped_requests,
         'servers_added': servers_added,
-        'final_servers': current_servers
+        'final_servers': current_servers,
+        'avg_utilization': avg_utilization * 100  # Convert to percentage
     }
-
 
 def print_results(title, results):
     print(f"\n=== {title} ===")
     print(f"Average Response Time: {results['avg_response_time']:.2f} ms")
     print(f"Average Queue Length: {results['avg_queue_length']:.2f}")
+    print(f"Average Server Utilization: {results['avg_utilization']:.2f}%")
     print(f"Total Requests Processed: {results['num_requests']}")
     if 'dropped_requests' in results:
         print(f"Dropped Requests: {results['dropped_requests']}")
     if 'final_servers' in results:
         print(f"Final Server Count: {results['final_servers']}")
-
 
 def main():
     print("=== E-Commerce System Performance Simulation ===")
@@ -125,7 +161,7 @@ def main():
     
     while True:
         print("\nChoose a simulation option:")
-        print("1. Response Time Under Diffrent Concurrent Users")
+        print("1. Response Time Under Different Concurrent Users")
         print("2. Server Requirements for 600ms Response Time")
         print("3. Simulation of Static and Dynamic Scaling")
         print("4. Exit")
@@ -134,22 +170,22 @@ def main():
         
         if choice == "1":
             print("\n=== Response Time vs. Concurrent Users ===")
-            print("| Users | Servers | Avg Response Time (ms) | Avg Queue Length |")
-            print("|-------|---------|------------------------|------------------|")
+            print("| Users | Servers | Avg Response Time (ms) | Avg Queue Length | Avg Utilization (%) |")
+            print("|-------|---------|------------------------|------------------|---------------------|")
             
             for users in [100, 300, 500, 700, 900]:
                 results = static_simulation(num_servers=1, num_users=users)
-                print(f"| {users:5d} | {1:7d} | {results['avg_response_time']:22.2f} | {results['avg_queue_length']:16.2f} |")
+                print(f"| {users:5d} | {1:7d} | {results['avg_response_time']:22.2f} | {results['avg_queue_length']:16.2f} | {results['avg_utilization']:19.2f} |")
         
         elif choice == "2":
             print("\n=== Finding Optimal Server Count (700 users) ===")
-            print("| Servers | Avg Response Time (ms) | Avg Queue Length |")
-            print("|---------|------------------------|------------------|")
+            print("| Servers | Avg Response Time (ms) | Avg Queue Length | Avg Utilization (%) |")
+            print("|---------|------------------------|------------------|---------------------|")
             
             optimal_servers = 0
             for servers in range(1, 11):
                 results = static_simulation(num_servers=servers, num_users=700)
-                print(f"| {servers:7d} | {results['avg_response_time']:22.2f} | {results['avg_queue_length']:16.2f} |")
+                print(f"| {servers:7d} | {results['avg_response_time']:22.2f} | {results['avg_queue_length']:16.2f} | {results['avg_utilization']:19.2f} |")
                 
                 if results['avg_response_time'] < 600 and optimal_servers == 0:
                     optimal_servers = servers
@@ -178,6 +214,9 @@ def main():
                     print("\nServer Scaling Events:")
                     for time, servers in results['servers_added']:
                         print(f"Time {time:.1f}: Changed to {servers} servers")
+                        
+                    # Add utilization report at scaling events
+                    print("\nUtilization led to these scaling decisions.")
             else:
                 print("Invalid scaling type selected.")
         
@@ -187,7 +226,6 @@ def main():
         
         else:
             print("Invalid choice. Please select 1-4.")
-
 
 if __name__ == "__main__":
     # Seed for reproducibility
