@@ -13,8 +13,6 @@
 
 <div align="center">
 
-| ![Response Time](https://img.shields.io/badge/Response%20Time-99.3%25%20Reduction-4361ee?style=for-the-badge) | ![Cost Savings](https://img.shields.io/badge/Cost%20Reduction-12.5%25-4361ee?style=for-the-badge) | ![User Experience](https://img.shields.io/badge/User%20Experience-+40%25-4361ee?style=for-the-badge) |
-|:---:|:---:|:---:|
 | *From 87.5s to 0.6s* | *$15K-$25K annual savings* | *Customer satisfaction increase* |
 
 </div>
@@ -72,12 +70,7 @@
   </tbody>
 </table>
 
-<div align="center">
 
-![Response Time Graph](https://www.researchgate.net/profile/Christoph-Meinel/publication/221014237/figure/fig3/AS:669498856513539@1536632175867/Response-time-vs-number-of-concurrent-users.png)
-*Response Time vs. Concurrent Users showing exponential degradation beyond 500 users*
-
-</div>
 
 ### Optimal Server Count (700 users)
 
@@ -144,12 +137,6 @@
 
 > **Critical Finding:** 8 servers needed to maintain response time below 600ms during peak hours.
 
-<div align="center">
-
-![Server Scaling Graph](https://www.researchgate.net/profile/Yiming-Xu-10/publication/336871094/figure/fig9/AS:821766932647937@1573015388590/Comparison-of-response-time-between-servers-with-2-CPUs-and-4-CPUs-with-number-of.jpg)
-*Response Time dramatically improves at 8 servers, dropping below the 600ms target threshold*
-
-</div>
 
 ### Static vs. Dynamic Scaling Comparison
 
@@ -181,7 +168,7 @@
 
 <div align="center">
 
-![Scaling Comparison](https://i.stack.imgur.com/WLSUh.png)
+
 *Comparison of resource utilization and response times between static and dynamic scaling strategies*
 
 </div>
@@ -196,7 +183,7 @@
 
 <div align="center">
 
-![Cost Optimization](https://miro.medium.com/max/1400/1*K9x_E1fjWRLyoT3GSoTOwg.png)
+
 *Projected infrastructure cost reduction over 12 months with dynamic scaling*
 
 </div>
@@ -248,12 +235,7 @@
 2. **Queue Management Inefficiencies:** Exponential growth in waiting times
 3. **Processing Distribution:** Non-uniform request handling observed in multi-server setups
 
-<div align="center">
 
-![Bottleneck Analysis](https://www.researchgate.net/profile/Gabriele-Cecchetti/publication/327067422/figure/fig7/AS:691630582755332@1541628061641/Bottleneck-analysis-we-observe-that-C-and-B-components-are-the-most-used-they-are-the.jpg)
-*Visualization of system bottlenecks and their impact on overall performance*
-
-</div>
 
 ### Architectural Recommendations
 
@@ -302,12 +284,6 @@
 - **Session Duration Impact:** Longer sessions (10+ minutes) create 2.5x more concurrent load
 - **Geographic Distribution:** 65% domestic traffic, 35% international with varied latency requirements
 
-<div align="center">
-
-![Traffic Patterns](https://i.imgur.com/eLjdYVQ.png)
-*24-hour user traffic pattern showing peak usage times and geographic distribution*
-
-</div>
 
 ### Capacity Planning Guidance
 
@@ -382,13 +358,6 @@
 - **Anomaly Detection:** Real-time identification of unusual traffic patterns
 - **Resource Optimization:** Self-tuning infrastructure components based on historical patterns
 
-<div align="center">
-
-![ML Integration](https://i.imgur.com/RgR6gYv.png)
-*Machine learning model accuracy in predicting traffic patterns and resource needs*
-
-</div>
-
 ## 📋 Implementation Roadmap
 
 <div style="position: relative; margin-left: 30px; padding-left: 20px; border-left: 4px solid #4361ee;">
@@ -460,13 +429,6 @@
 - **Conversion Rate:** Projected 0.8-1.2% increase
 - **Average Order Value:** Potential 5% increase due to improved browsing experience
 - **Customer Retention:** Estimated 7-9% improvement in return customer rate
-
-<div align="center">
-
-![Revenue Impact](https://i.imgur.com/IpvXcRD.png)
-*Projected revenue impact of performance improvements over 12 months*
-
-</div>
 
 ## 🌐 Scalability Frontiers
 
