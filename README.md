@@ -1,11 +1,11 @@
 # E-commerce System Performance Simulation Gains
 
-**Generated Report:** 2025-05-14 18:18:15 UTC  
+**Generated Report:** 2025-05-14 18:20:40 UTC  
 **Author:** [@Marwan911e](https://github.com/Marwan911e)
 
 <div align="center">
   
-![Performance Simulation Banner](https://via.placeholder.com/1200x300/4361ee/ffffff?text=E-commerce+System+Performance+Simulation)
+![Performance Simulation Banner](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=300&fit=crop&crop=edges&q=80)
 
 </div>
 
@@ -74,7 +74,7 @@
 
 <div align="center">
 
-![Response Time Graph](https://via.placeholder.com/800x400/ffffff/333333?text=Response+Time+vs+Concurrent+Users)
+![Response Time Graph](https://www.researchgate.net/profile/Christoph-Meinel/publication/221014237/figure/fig3/AS:669498856513539@1536632175867/Response-time-vs-number-of-concurrent-users.png)
 *Response Time vs. Concurrent Users showing exponential degradation beyond 500 users*
 
 </div>
@@ -146,7 +146,7 @@
 
 <div align="center">
 
-![Server Scaling Graph](https://via.placeholder.com/800x400/ffffff/333333?text=Response+Time+vs+Server+Count)
+![Server Scaling Graph](https://www.researchgate.net/profile/Yiming-Xu-10/publication/336871094/figure/fig9/AS:821766932647937@1573015388590/Comparison-of-response-time-between-servers-with-2-CPUs-and-4-CPUs-with-number-of.jpg)
 *Response Time dramatically improves at 8 servers, dropping below the 600ms target threshold*
 
 </div>
@@ -181,7 +181,7 @@
 
 <div align="center">
 
-![Scaling Comparison](https://via.placeholder.com/800x400/ffffff/333333?text=Static+vs+Dynamic+Scaling+Comparison)
+![Scaling Comparison](https://i.stack.imgur.com/WLSUh.png)
 *Comparison of resource utilization and response times between static and dynamic scaling strategies*
 
 </div>
@@ -196,7 +196,7 @@
 
 <div align="center">
 
-![Cost Optimization](https://via.placeholder.com/800x300/ffffff/333333?text=Infrastructure+Cost+Projection)
+![Cost Optimization](https://miro.medium.com/max/1400/1*K9x_E1fjWRLyoT3GSoTOwg.png)
 *Projected infrastructure cost reduction over 12 months with dynamic scaling*
 
 </div>
@@ -250,7 +250,7 @@
 
 <div align="center">
 
-![Bottleneck Analysis](https://via.placeholder.com/800x400/ffffff/333333?text=System+Bottleneck+Analysis)
+![Bottleneck Analysis](https://www.researchgate.net/profile/Gabriele-Cecchetti/publication/327067422/figure/fig7/AS:691630582755332@1541628061641/Bottleneck-analysis-we-observe-that-C-and-B-components-are-the-most-used-they-are-the.jpg)
 *Visualization of system bottlenecks and their impact on overall performance*
 
 </div>
@@ -304,7 +304,7 @@
 
 <div align="center">
 
-![Traffic Patterns](https://via.placeholder.com/800x400/ffffff/333333?text=Daily+Traffic+Patterns)
+![Traffic Patterns](https://i.imgur.com/eLjdYVQ.png)
 *24-hour user traffic pattern showing peak usage times and geographic distribution*
 
 </div>
@@ -384,7 +384,7 @@
 
 <div align="center">
 
-![ML Integration](https://via.placeholder.com/800x400/ffffff/333333?text=ML-Based+Traffic+Prediction)
+![ML Integration](https://i.imgur.com/RgR6gYv.png)
 *Machine learning model accuracy in predicting traffic patterns and resource needs*
 
 </div>
@@ -463,7 +463,7 @@
 
 <div align="center">
 
-![Revenue Impact](https://via.placeholder.com/800x300/ffffff/333333?text=Projected+Revenue+Impact)
+![Revenue Impact](https://i.imgur.com/IpvXcRD.png)
 *Projected revenue impact of performance improvements over 12 months*
 
 </div>
@@ -526,6 +526,7 @@ Specific achievements include:
 These gains position the e-commerce platform for sustainable growth while maintaining performance excellence and cost efficiency.
 
 <div align="center">
-  <img src="https://via.placeholder.com/150x50/4361ee/ffffff?text=Marwan911e" alt="Project signature" />
   <p><i>Empowering e-commerce through data-driven infrastructure decisions</i></p>
+  <p>Report generated: 2025-05-14 18:20:40 UTC</p>
+  <p>Author: @Marwan911e</p>
 </div>
